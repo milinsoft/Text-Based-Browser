@@ -1,3 +1,8 @@
+import os
+import sys
+from os import path
+
+import re
 
 nytimes_com = '''
 This New Liquid Is Magnetic, and Mesmerizing
@@ -37,15 +42,44 @@ Twitter and Square Chief Executive Officer Jack Dorsey
 # write your code here
 
 
+def mkdir(directory, url, text):
+    print("URL is:", url)
+    filename = re.search(r"(\w+)\.", url).group()[:-1]
+
+    print("filename is: ", filename)
+
+    #current_dir = os.getcwd()
+    #print(current_dir)
+
+    if path.exists(directory):
+        try:
+            os.mkdir(directory)
+            os.chdir(os.path(directory))
+            print(os.getcwd())
+        except FileExistsError:
+            pass
+        else:
+            with open(filename, "w") as file:
+                file.write(text)
+
+
+
 def main():
+    directory = sys.argv[0]
+
     while True:
         url = input()
         if url == "bloomberg.com":
-            print(bloomberg_com)
+            # print(bloomberg_com)
+            mkdir(directory, url, bloomberg_com)
+
         elif url == "nytimes.com":
-            print(nytimes_com)
+            # print(nytimes_com)
+            mkdir(directory, url, nytimes_com)
         elif url == "exit":
             break
+        else:
+            print("ERROR!")
 
 
 if __name__ == "__main__":
