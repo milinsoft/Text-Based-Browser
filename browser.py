@@ -3,7 +3,7 @@ import sys
 
 import re
 import requests
-
+from bs4 import BeautifulSoup
 # write your code here
 
 
@@ -27,14 +27,17 @@ def main():
     while True:
         url = input()
         if url not in {"exit", "back"}:
-            r = requests.get(url) if url.startswith("http://") else requests.get("".join(("http://", url)))
-            if r.status_code != 200:
-                print("ERROR!")
-                continue
-            else:
-                print(r.text)
-                mkdir(directory, url, r.text)
-                pages_history.append(r.text)
+            try:
+                r = requests.get(url) if url.startswith("http://") else requests.get("".join(("http://", url)))
+                if r.status_code != 200:
+                    print("Connection ERROR!")
+                    continue
+                soup = BeautifulSoup(r.content, "html.parser")
+                print(soup.get_text())
+                mkdir(directory, url, soup.get_text())
+                pages_history.append(soup.get_text())
+            except requests.exceptions.ConnectionError:
+                print("Incorrect URL")
         elif url == "exit":
             break
         elif url == "back":
