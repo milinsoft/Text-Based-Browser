@@ -4,7 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 import colorama
-from colorama import Fore
+from colorama import Fore, Style
 
 
 class TextBasedBrowser:
@@ -40,7 +40,7 @@ class TextBasedBrowser:
                 page = ""
                 for descendant in soup:
                     if descendant.name in tags:
-                        page += Fore.BLUE + descendant.get_text().strip() if descendant.name == "a" else descendant.get_text().strip()
+                        page += Fore.BLUE + descendant.get_text().strip() if descendant.name == "a" else Style.RESET_ALL + descendant.get_text().strip()
                 print(page)
                 self.cache_page(url, page)
                 self.cache.append(page)
